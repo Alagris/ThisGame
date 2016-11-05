@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8" />
+<title>Hi</title>
+</head>
+<body>
+	<p th:text="${message == null} ? 'Hello' : ${message}"></p>
+	<p>
+	<form action="#" th:action="${@{}}" th:object="${greeting}"
+		method="post">
+		<p>
+			Id: <input type="text" th:field="*{id}" />
+		</p>
+		<p>
+			Message: <input type="text" th:field="*{content}" />
+		</p>
+		<p>
+			<input type="submit" value="Submit" /> <input type="reset"
+				value="Reset" />
+		</p>
+	</form>
+
+	<p>
+		<a href="/register.html">Register</a>
+	</p>
+</body>
+</html>

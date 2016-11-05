@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="
+	http://www.springframework.org/schema/beans 
+	http://www.springframework.org/schema/beans/spring-beans.xsd
+	http://www.springframework.org/schema/mvc
+	http://www.springframework.org/schema/mvc/spring-mvc-4.0.xsd"
+	xmlns:mvc="http://www.springframework.org/schema/mvc">
+
+	<!-- <bean id="templateResolver" class="org.thymeleaf.templateresolver.ServletContextTemplateResolver"> 
+		<property name="prefix" value="classpath:/src/main/resources/templates/" 
+		/> <property name="suffix" value=".html" /> <property name="templateMode" 
+		value="HTML5" /> </bean> <bean id="templateEngine" class="org.thymeleaf.spring4.SpringTemplateEngine"> 
+		<property name="templateResolver" ref="templateResolver" /> </bean> -->
+
+	<bean id="hashPassword" class="net.alagris.src.crypto.HashPassword">
+		<property name="saltLength" value="#{64 * 8}" />
+		<property name="hashLength" value="#{64 * 8}" />
+		<property name="iterations" value="1000" />
+	</bean>
+
+	<bean id="persistentDir" class="java.io.File">
+		<constructor-arg type="java.lang.String" value="/my/tmp/persistentUploads/" />
+	</bean>
+	<bean id="assertDatabase" class="net.alagris.src.model.AssertDatabase">
+		<property name="databaseName" value="this_game_db"></property>
+		<property name="maxInclusiveUsernameLength" value="20"></property>
+		<property name="minInclusiveUserPasswordLength" value="6"></property>
+		<property name="passwordHashFiledName" value="pass_hash"></property>
+		<property name="passwordSaltFieldName" value="pass_salt"></property>
+		<property name="usernameFiledName" value="username"></property>
+		<property name="usersTableName" value="users_table"></property>
+	</bean>
+
+	<bean id="userDatabaseQuery" class="net.alagris.src.model.UserDatabaseQuery">
+	</bean>
+	<bean id="controllersBean" class="net.alagris.src.controller.ControllersBean">
+		<property name="loginPath" value="/login.html"></property>
+		<property name="loginSubmit" value="/login"></property>
+		<property name="registerPath" value="/register.html"></property>
+		<property name="registerSubmit" value="/register"></property>
+	</bean>
+
+	<mvc:resources mapping="/resources/**"
+		location="classpath:/src/main/resources/resources/" />
+
+</beans>
+
+
