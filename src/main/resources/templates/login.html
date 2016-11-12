@@ -7,19 +7,20 @@
 <body>
 	<p th:text="${message == null} ? 'Hello' : ${message}"></p>
 	<p>
-	<form action="#" th:action="${@{}}" th:object="${greeting}"
-		method="post">
+	<form action="#" th:action="@{/login}"
+		th:object="${unporcessedUserObject}" onsubmit="return validate();" method="post">
 		<p>
-			Id: <input type="text" th:field="*{id}" />
+			User: <input type="text" th:field="*{username}" />
 		</p>
 		<p>
-			Message: <input type="text" th:field="*{content}" />
+			Password: <input type="password" th:field="*{plaintextPassword}" />
 		</p>
 		<p>
 			<input type="submit" value="Submit" /> <input type="reset"
 				value="Reset" />
 		</p>
 	</form>
+
 
 	<p>
 		<a href="/register.html">Register</a>

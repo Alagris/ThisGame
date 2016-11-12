@@ -19,44 +19,44 @@ import net.alagris.src.model.object.UserObject;
 @Controller
 public class RegisterController {
 
-    @Autowired
-    UserDatabaseQuery userDatabaseQuery;
-    @Autowired
-    AssertDatabase assertDatabase;
-    @Autowired
-    HashPassword hashPassword;
+	@Autowired
+	UserDatabaseQuery userDatabaseQuery;
+	@Autowired
+	AssertDatabase assertDatabase;
+	@Autowired
+	HashPassword hashPassword;
 
-    @RequestMapping()
-    String login(Model model) {
-	model.addAttribute(new UnporcessedUserObject());
-	return "/login.html";
-    }
-
-    String loginSubmit(@ModelAttribute UnporcessedUserObject unporcessedUserObject,
-	    RedirectAttributes redirectAttributes) {
-	if (!unporcessedUserObject.validate(assertDatabase, userDatabaseQuery)) {
-	    redirectAttributes.addFlashAttribute("message", "Validation failed!");
-	    return "redirect:/login.html";
+	@RequestMapping()
+	String login(Model model) {
+		model.addAttribute("unporcessedUserObject",new UnporcessedUserObject());
+		return "/register.html";
 	}
-	try {
-	    UserObject userObject = userDatabaseQuery.getUserByName(unporcessedUserObject.getUsername());
-	    try {
-		if (userObject.comparePasswords(unporcessedUserObject.getPlaintextPassword(), hashPassword)) {
-		    redirectAttributes.addFlashAttribute("message", "Login successful!");
-		    return "redirect:/";
-		} else {
-		    redirectAttributes.addFlashAttribute("message", "Login or password incorrect!");
-		    return "redirect:/login.html";
+
+	String loginSubmit(@ModelAttribute UnporcessedUserObject unporcessedUserObject,
+			RedirectAttributes redirectAttributes) {
+		if (!unporcessedUserObject.validate(assertDatabase, userDatabaseQuery)) {
+			redirectAttributes.addFlashAttribute("message", "Validation failed!");
+			return "redirect:/register.html";
 		}
-	    } catch (InvalidKeySpecException e) {
-		e.printStackTrace();
-		redirectAttributes.addFlashAttribute("message", "Something went wrong!");
-		return "redirect:/login.html";
-	    }
-	} catch (DataAccessException e) {
-	    redirectAttributes.addFlashAttribute("message", "User doesn't exist!");
-	    return "redirect:/login.html";
+		try {
+			UserObject userObject = userDatabaseQuery.getUserByName(unporcessedUserObject.getUsername());
+			try {
+				if (userObject.comparePasswords(unporcessedUserObject.getPlaintextPassword(), hashPassword)) {
+					redirectAttributes.addFlashAttribute("message", "Login successful!");
+					return "redirect:/";
+				} else {
+					redirectAttributes.addFlashAttribute("message", "Login or password incorrect!");
+					return "redirect:/register.html";
+				}
+			} catch (InvalidKeySpecException e) {
+				e.printStackTrace();
+				redirectAttributes.addFlashAttribute("message", "Something went wrong!");
+				return "redirect:/register.html";
+			}
+		} catch (DataAccessException e) {
+			redirectAttributes.addFlashAttribute("message", "User doesn't exist!");
+			return "redirect:/register.html";
+		}
 	}
-    }
 
 }
